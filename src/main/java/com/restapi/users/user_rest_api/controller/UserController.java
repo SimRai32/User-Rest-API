@@ -2,6 +2,7 @@ package com.restapi.users.user_rest_api.controller;
 
 import com.restapi.users.user_rest_api.model.User;
 import com.restapi.users.user_rest_api.service.UserService; 
+import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -32,5 +33,16 @@ public class UserController {
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
+        Optional<User> updated = userService.updateUser(id, updatedUser);
+
+        if (updated.isPresent()) {
+            return ResponseEntity.ok(updated.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
